@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
       <h1>Our One-Millionth Recipe Box</h1>
       <h3>{{month}}/{{day}}/{{year}}</h3>
       <ul>
-        <li [class]="priorityColor(currentRecipe)" (click)="isCooked(currentRecipe)" *ngFor="let currentRecipe of recipes">{{currentRecipe.title}} - {{currentRecipe.ingredients}} - {{currentRecipe.instructions}}  <button (click)="editRecipe(currentRecipe)">Edit!</button></li>
+        <li [class]="priorityColor(currentRecipe)" (click)="showDetail(currentRecipe)" *ngFor="let currentRecipe of recipes">{{currentRecipe.title}}<button (click)="editRecipe(currentRecipe)">Edit!</button></li>
       </ul>
       <hr>
       <div *ngIf="selectedRecipe">
@@ -16,13 +16,28 @@ import { Component } from '@angular/core';
         <h3>Edit Recipe</h3>
         <label>Enter Recipe Title:</label>
         <input [(ngModel)]="selectedRecipe.title">
+        <br>
+        <label>Enter Recipe Ingredients:</label>
         <input [(ngModel)]="selectedRecipe.ingredients">
+        <br>
+        <label>Enter Recipe Instructions:</label>
+        <input [(ngModel)]="selectedRecipe.instructions">
+        <br>
         <label>Enter Recipe Priority (1-3):</label>
         <br>
         <input type="radio" [(ngModel)]="selectedRecipe.priority" [value]="1">1 (Low Priority)<br>
         <input type="radio" [(ngModel)]="selectedRecipe.priority" [value]="2">2 (Medium Priority)<br>
         <input type="radio" [(ngModel)]="selectedRecipe.priority" [value]="3">3 (High Priority)
+        <br>
         <button (click)="finishedEditing()">Done</button>
+      </div>
+
+      <div *ngIf="detailedRecipe">
+        <h3>{{detailedRecipe.title}}</h3>
+        <p>{{detailedRecipe.ingredients}}</p>
+        <p>{{detailedRecipe.instructions}}</p>
+
+        <button (click)="hideDetail()">Hide Detail</button>
       </div>
     </div>
   `
@@ -47,12 +62,12 @@ export class AppComponent {
     this.selectedRecipe = null;
   }
 
-  isCooked(clickedRecipe: Recipe) {
-    if(clickedRecipe.cooked === true) {
-      alert("This recipe is cooked!");
-    } else {
-      alert("This recipe is not cooked. Better cook now!");
-    }
+  hideDetail() {
+    this.detailedRecipe = null;
+  }
+
+  showDetail(clickedRecipe) {
+    this.detailedRecipe = clickedRecipe;
   }
 
   priorityColor(currentRecipe){
